@@ -24,8 +24,14 @@ router.get('/:id', validateUserId, (req, res) => {
     res.status(200).json(req.user)
 });
 
-router.get('/:id/posts', (req, res) => {
-
+router.get('/:id/posts', validateUserId, (req, res) => {
+    userDb.getUserPosts(req.params.id)
+        .then( posts => {
+            res.status(200).json(posts)
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'no posts found' })
+        })
 });
 
 router.delete('/:id', (req, res) => {
@@ -58,10 +64,29 @@ function validateUserId(req, res, next) {
 };
 
 function validateUser(req, res, next) {
+    const body = req.body;
+    const name = req.body.name;
 
+    if(!body){
+        res.status(400).json({ message: 'missing required user' })
+    } else if(!name){
+        res.status(400).json({ message: 'missing required name' })
+    } else {
+        next()
+    }
 };
 
 function validatePost(req, res, next) {
+    const body = req.body;
+    const text = req.body.text;
+
+    if(!body){
+        res.status(400).json({ message: 'missing required post' })
+    } else if(!text){
+        res.status(400).json({ message: 'missing required text' })
+    } else {
+        next()
+    }
 
 };
 
