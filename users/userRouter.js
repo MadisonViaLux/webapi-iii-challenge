@@ -4,13 +4,6 @@ const router = express.Router();
 // server.use(express.json())
 
 
-function validateUserId(req, res, next) {
-    const { id } = req.body
-};
-
-
-
-
 router.post('/', (req, res) => {
 
 });
@@ -27,8 +20,8 @@ router.get('/', (req, res) => {
         .catch(res.status(500).json({ error: 'no user found'}))
 });
 
-router.get('/:id', (req, res) => {
-
+router.get('/:id', validateUserId, (req, res) => {
+    res.status(200).json(req.user)
 });
 
 router.get('/:id/posts', (req, res) => {
@@ -45,16 +38,31 @@ router.put('/:id', (req, res) => {
 
 //custom middleware
 
-// function validateUserId(req, res, next) {
+function validateUserId(req, res, next) {
+    const { id } = req.params
 
-// };
+    userDb.getById(id)
+        .then(user => {
 
-// function validateUser(req, res, next) {
+            if(!user){
+                console.log(user)
+                req.user = user;
+                next();
+            } else {
+                return res.status(404).json({message: 'user ID not found'})
+            }
+        })
+        .catch(error => {
+            res.status(500).json({message: 'invalid user id'})
+        });
+};
 
-// };
+function validateUser(req, res, next) {
 
-// function validatePost(req, res, next) {
+};
 
-// };
+function validatePost(req, res, next) {
+
+};
 
 module.exports = router;
