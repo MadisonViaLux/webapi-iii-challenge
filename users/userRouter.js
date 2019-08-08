@@ -1,15 +1,31 @@
 const express = require('express')
 const userDb = require('./userDb')
+const postDb = require('../posts/postDb')
 const router = express.Router();
-// server.use(express.json())
 
 
-router.post('/', (req, res) => {
 
+router.post('/', validateUser, (req, res) => {
+    userDb.insert(req.body)
+        .then(user => {
+            res.status(201).json(user)
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'cannot create user' })
+        })
 });
 
-router.post('/:id/posts', (req, res) => {
-
+router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
+    
+    req.body.user_id = req.params.id
+    
+    postDb.insert(req.body)
+        .then(posts => {
+            res.status(201).json(posts)
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'cannot create post' })
+        })
 });
 
 router.get('/', (req, res) => {
@@ -44,6 +60,7 @@ router.put('/:id', (req, res) => {
 
 //custom middleware
 
+
 function validateUserId(req, res, next) {
     const { id } = req.params
 
@@ -62,6 +79,7 @@ function validateUserId(req, res, next) {
             res.status(500).json({message: 'invalid user id'})
         });
 };
+
 
 function validateUser(req, res, next) {
     const body = req.body;
