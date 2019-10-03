@@ -19,15 +19,15 @@
   "author": "Lambda School",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LambdaSchool/Node-Blog/issues"
+    "url": "https://github.com/MadisonViaLux/webapi-iii-challenge/issues"
   },
-  "homepage": "https://github.com/LambdaSchool/Node-Blog#readme",
+  "homepage": "https://github.com/MadisonViaLux/webapi-iii-challenge#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.3"
+  },
   "dependencies": {
     "express": "^4.17.1",
-    "knex": "^0.18.3",
-    "sqlite3": "^4.0.9"
-  },
-  "devDependencies": {
-    "nodemon": "^1.19.1"
+    "knex": "^0.19.4",
+    "sqlite3": "^4.1.0"
   }
 }
